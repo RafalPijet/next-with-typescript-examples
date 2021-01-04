@@ -1,27 +1,41 @@
-// import React from 'react';
-// import { NextPage } from 'next';
+import React, { useState } from 'react';
+import { NextPage } from 'next';
 
-import React from "react";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
-import { ConnectedTasksList } from "../components/TasksList";
-import { reducer } from "../reducer";
+// import React from "react";
+// import { Provider } from "react-redux";
+// import { createStore } from "redux";
+// import { ConnectedTasksList } from "../components/TasksList";
+// import { Weather, WithWeatherProps, WrappedWeather } from "../components/Weather";
+// import { reducer } from "../reducer";
 
-// interface InitialProps {
-//   greeting: string;
-// }
+interface InitialProps {}
 
-// interface Props extends InitialProps {}
+interface Props extends InitialProps {}
 
-// const IndexPage: NextPage<Props, InitialProps> = props => {
-//   return <div>{props.greeting}</div>;
-// };
+const IndexPage: NextPage<Props, InitialProps> = () => {
+  const [email, setEmail] = useState('')
 
-// IndexPage.getInitialProps = async () => ({
-//   greeting: 'Hello World!'
-// });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setEmail(value);
+  }
 
-// export default IndexPage;
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Submit: ' + email)
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <p>
+        <input type="email" value={email} onChange={handleChange}/>
+      </p>
+      <button type='submit'>Subscribe</button>
+    </form>
+  );
+};
+
+export default IndexPage;
 
 // interface Task {
 //   title: string;
@@ -81,10 +95,17 @@ import { reducer } from "../reducer";
 
 // export default () => <div><TasksList initialTasks={list}/></div>
 
-const store = createStore(reducer);
+// const store = createStore(reducer);
 
-export default () => (
-  <Provider store={store} >
-    <ConnectedTasksList/>
-  </Provider>  
-)
+// export default () => (
+//   <Provider store={store} >
+//     <ConnectedTasksList/>
+//     <Weather temperature={18} scale='F' theme='green'/>
+//     <WrappedWeather theme='yellow'/>
+//     <WithWeatherProps>
+//       {props => {
+//         return <Weather {...props} theme='green'/>
+//       }}
+//     </WithWeatherProps>
+//   </Provider>
+// )
