@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
+import Link from 'next/link';
 
 // import React from "react";
 // import { Provider } from "react-redux";
@@ -12,27 +13,77 @@ interface InitialProps {}
 
 interface Props extends InitialProps {}
 
+interface State {
+  notificationVisible: boolean;
+}
+
 const IndexPage: NextPage<Props, InitialProps> = () => {
-  const [email, setEmail] = useState('')
+  // const [email, setEmail] = useState('')
+  const [state, setState] = useState<State>({
+    notificationVisible: true,
+  });
+  const [likes, setLikes] = useState(0);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setEmail(value);
-  }
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   setEmail(value);
+  // }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('Submit: ' + email)
-  }
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log('Submit: ' + email)
+  // }
 
+  useEffect(() => {
+    console.log('useEffect callback called');
+    const listener = (e: MouseEvent) => {
+      console.log('mousedown', e.offsetX, e.offsetY);
+    };
+    document.addEventListener('mousedown', listener);
+    return () => {
+      console.log('useEffect CLEANUP function');
+      document.removeEventListener('mousedown', listener);
+    };
+  }, [likes]);
+
+  const handleClick = () => {
+    setState({
+      notificationVisible: false,
+    });
+  };
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
+      {state.notificationVisible && (
+        <div
+          style={{
+            background: 'peachpuff',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            padding: '10px',
+          }}
+        >
+          This website is using cookies.{' '}
+          <button onClick={handleClick}>I agree</button>
+        </div>
+      )}
       <p>
-        <input type="email" value={email} onChange={handleChange}/>
+        <Link href={{ pathname: '/about' }}>
+          <a>About</a>
+        </Link>
       </p>
-      <button type='submit'>Subscribe</button>
-    </form>
+      <p>
+        Likes: {likes} <button onClick={() => setLikes(likes + 1)}>Like</button>
+      </p>
+    </div>
   );
+  // return (
+  //   <form onSubmit={handleSubmit}>
+  //     <p>
+  //       <input type="email" value={email} onChange={handleChange}/>
+  //     </p>
+  //     <button type='submit'>Subscribe</button>
+  //   </form>
+  // );
 };
 
 export default IndexPage;
